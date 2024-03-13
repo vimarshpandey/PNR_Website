@@ -55,97 +55,108 @@
       <div style="background-color: rgb(255, 200, 0);" class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center rounded-5">
         <div class="col-md-12 p-lg-5 mx-auto my-5" id="pnrstatus">
             <h1 class="fw-bold">Enter the PNR number</h1><br>
-            <form class="text-center">
+            <form class="text-center" method="post" action="">
                 <input type="text" class="form-control w-25 mx-auto" id="pnr" name="pnr" placeholder="Ex. 1234567890" required>
-                <button type="button" class="btn btn-primary mt-3">Check Status</button>
+                <button type="submit" class="btn btn-primary mt-3">Check Status</button>
             </form>
             <!-- Display data -->
             <?php
-              $api_url = 'https://travel.paytm.com/api/trains/v1/status?vertical=train&client=web&is_genuine_pnr_web_request=1&pnr_number=2107568301';
-              $response = file_get_contents($api_url);
-
-              // Check if the request was successful
-              if ($response === false)
+              if ($_SERVER['REQUEST_METHOD'] == 'POST')
               {
-                  die('Failed to fetch data from the API');
-              }
+                $user_pnr = $_POST['pnr'];
 
-              // Decode the JSON response
-              $data = json_decode($response, true);
+                $api_url = 'https://travel.paytm.com/api/trains/v1/status?vertical=train&client=web&is_genuine_pnr_web_request=1&pnr_number=' . urlencode($user_pnr);
+                $response = file_get_contents($api_url);
 
-              // Check if JSON decoding was successful
-              if ($data === null)
-              {
-                  die('Error decoding JSON data');
-              }
+                if ($response === false)
+                {
+                    die('Failed to fetch data from the API');
+                }
 
-              $train_number = $data['body']['train_number'];
-              $train_name = $data['body']['train_name'];
-              $boarding_date = $data['body']['date'];
-              $from = $data['body']['pulse_data']['journey_src'];
-              $to = $data['body']['pulse_data']['journey_dest'];
-              $boarding_point = $data['body']['boarding_station']['station_name'];
-              $reservation_upto = $data['body']['reservation_upto']['station_name'];
-              $travel_class = $data['body']['class'];
+                $data = json_decode($response, true);
 
-              // Extract passenger details
-              $passenger_details = $data['body']['pax_info'];
-            ?>
-            <div class="h4 mt-5">You Queried for PNR number 1234567890</div>
-            <table class="table table-warning table-hover table-rounded mt-3">
-              <thead>
-                  <tr>
-                      <th>Train Number</th>
-                      <th>Train Name</th>
-                      <th>Boarding Date<br>(YYYY-MM-DD)</th>
-                      <th>From</th>
-                      <th>To</th>
-                      <th>Borading Point</th>
-                      <th>Reservation Upto</th>
-                      <th>Class</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  <tr>
-                      <td><?php echo $train_number; ?></td>
-                      <td><?php echo $train_name; ?></td>
-                      <td><?php echo $boarding_date; ?></td>
-                      <td><?php echo $from; ?></td>
-                      <td><?php echo $to; ?></td>
-                      <td><?php echo $boarding_point; ?></td>
-                      <td><?php echo $reservation_upto; ?></td>
-                      <td><?php echo $travel_class; ?></td>
-                  </tr>
-              </tbody>
-            </table>
+                if ($data === null)
+                {
+                    die('Error decoding JSON data');
+                }
 
-            <table class="table table-warning table-hover mt-3">
-              <thead>
-                  <tr>
-                      <th>Passenger Name</th>
-                      <th>Booking Status</th>
-                      <th>Current Status</th>
-                      <th>Departure from<br>Boarding Station</th>
-                      <th>Arrival at<br>Destination</th>
-                      <th>Remarks (if any)</th>
-                  </tr>
-              </thead>
-              <tbody>
+                if (isset($data['body']))
+                {
+                  $train_number = $data['body']['train_number'];
+                  $train_name = $data['body']['train_name'];
+                  $boarding_date = $data['body']['date'];
+                  $from = $data['body']['pulse_data']['journey_src'];
+                  $to = $data['body']['pulse_data']['journey_dest'];
+                  $boarding_point = $data['body']['boarding_station']['station_name'];
+                  $reservation_upto = $data['body']['reservation_upto']['station_name'];
+                  $travel_class = $data['body']['class'];
+          
+                  // Extract passenger details
+                  $passenger_details = $data['body']['pax_info'];
+              ?>
+                <div class="h4 mt-5">You Queried for PNR number <?php echo htmlspecialchars($user_pnr); ?></div>
+                <table class="table table-warning table-hover table-rounded mt-3">
+                    <thead>
+                      <tr>
+                        <th>Train Number</th>
+                        <th>Train Name</th>
+                        <th>Boarding Date<br>(YYYY-MM-DD)</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Borading Point</th>
+                        <th>Reservation Upto</th>
+                        <th>Class</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><?php echo $train_number; ?></td>
+                        <td><?php echo $train_name; ?></td>
+                        <td><?php echo $boarding_date; ?></td>
+                        <td><?php echo $from; ?></td>
+                        <td><?php echo $to; ?></td>
+                        <td><?php echo $boarding_point; ?></td>
+                        <td><?php echo $reservation_upto; ?></td>
+                        <td><?php echo $travel_class; ?></td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  <table class="table table-warning table-hover mt-3">
+                    <thead>
+                        <tr>
+                            <th>Passenger Name</th>
+                            <th>Booking Status</th>
+                            <th>Current Status</th>
+                            <th>Departure from<br>Boarding Station</th>
+                            <th>Arrival at<br>Destination</th>
+                            <th>Remarks (if any)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                          foreach ($passenger_details as $passenger)
+                          {
+                            echo '<tr>';
+                            echo '<td>' . $passenger['passengerName'] . '</td>';
+                            echo '<td>' . $passenger['bookingStatus'] . " / " . $passenger['bookingBerthNo'] . '</td>';
+                            echo '<td>' . $passenger['currentStatus'] . " / " . $passenger['currentCoachId'] . " / " . $passenger['currentBerthNo'] . " / " . $passenger['currentBerthCode'] . '</td>';
+                            echo '<td>' . $data['body']['boarding_station']['departure_time'] . '</td>';
+                            echo '<td>' . $data['body']['reservation_upto']['arrival_time'] . '</td>';
+                            echo '<td>' . $data['body']['pnr_message'] . '</td>';
+                            echo '</tr>';
+                          }
+                        ?>
+                    </tbody>
+                  </table>
                   <?php
-                    foreach ($passenger_details as $passenger)
-                    {
-                      echo '<tr>';
-                      echo '<td>' . $passenger['passengerName'] . '</td>';
-                      echo '<td>' . $passenger['bookingStatus'] . " / " . $passenger['bookingBerthNo'] . '</td>';
-                      echo '<td>' . $passenger['currentStatus'] . " / " . $passenger['currentCoachId'] . " / " . $passenger['currentBerthNo'] . " / " . $passenger['currentBerthCode'] . '</td>';
-                      echo '<td>' . $data['body']['boarding_station']['departure_time'] . '</td>';
-                      echo '<td>' . $data['body']['reservation_upto']['arrival_time'] . '</td>';
-                      echo '<td>' . $data['body']['pnr_message'] . '</td>';
-                      echo '</tr>';
+                      }
+                      else
+                      {
+                        echo '<div class="h4 mt-5">No data available for the entered PNR number.</div>';
+                      }
                     }
                   ?>
-              </tbody>
-            </table>
         </div>
       </div>
 
