@@ -87,6 +87,9 @@
               $boarding_point = $data['body']['boarding_station']['station_name'];
               $reservation_upto = $data['body']['reservation_upto']['station_name'];
               $travel_class = $data['body']['class'];
+
+              // Extract passenger details
+              $passenger_details = $data['body']['pax_info'];
             ?>
             <div class="h4 mt-5">You Queried for PNR number 1234567890</div>
             <table class="table table-warning table-hover table-rounded mt-3">
@@ -94,7 +97,7 @@
                   <tr>
                       <th>Train Number</th>
                       <th>Train Name</th>
-                      <th>Boarding Date<br>(DD-MM-YYYY)</th>
+                      <th>Boarding Date<br>(YYYY-MM-DD)</th>
                       <th>From</th>
                       <th>To</th>
                       <th>Borading Point</th>
@@ -119,23 +122,28 @@
             <table class="table table-warning table-hover mt-3">
               <thead>
                   <tr>
-                      <th>Serial Number</th>
+                      <th>Passenger Name</th>
                       <th>Booking Status</th>
                       <th>Current Status</th>
                       <th>Departure from<br>Boarding Station</th>
                       <th>Arrival at<br>Destination</th>
-                      <th>Remarks (if ant)</th>
+                      <th>Remarks (if any)</th>
                   </tr>
               </thead>
               <tbody>
-                  <tr>
-                      <td>Passeger 1</td>
-                      <td>RAC/46</td>
-                      <td>CNF/B8/70</td>
-                      <td>11:35</td>
-                      <td>4:40</td>
-                      <td>Journey Realloted in Upper Class from SL to 3A</td>
-                  </tr>
+                  <?php
+                    foreach ($passenger_details as $passenger)
+                    {
+                      echo '<tr>';
+                      echo '<td>' . $passenger['passengerName'] . '</td>';
+                      echo '<td>' . $passenger['bookingStatus'] . " / " . $passenger['bookingBerthNo'] . '</td>';
+                      echo '<td>' . $passenger['currentStatus'] . " / " . $passenger['currentCoachId'] . " / " . $passenger['currentBerthNo'] . " / " . $passenger['currentBerthCode'] . '</td>';
+                      echo '<td>' . $data['body']['boarding_station']['departure_time'] . '</td>';
+                      echo '<td>' . $data['body']['reservation_upto']['arrival_time'] . '</td>';
+                      echo '<td>' . $data['body']['pnr_message'] . '</td>';
+                      echo '</tr>';
+                    }
+                  ?>
               </tbody>
             </table>
         </div>

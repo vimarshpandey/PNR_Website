@@ -1,7 +1,7 @@
 <?php
 
 // Replace 'YOUR_API_ENDPOINT' with the actual API endpoint URL
-$api_url = 'https://travel.paytm.com/api/trains/v1/status?vertical=train&client=web&is_genuine_pnr_web_request=1&pnr_number=2409094894';
+$api_url = 'https://travel.paytm.com/api/trains/v1/status?vertical=train&client=web&is_genuine_pnr_web_request=1&pnr_number=2107568301';
 
 // Fetch data from the API using file_get_contents
 $response = file_get_contents($api_url);
