@@ -59,6 +59,35 @@
                 <input type="text" class="form-control w-25 mx-auto" id="pnr" name="pnr" placeholder="Ex. 1234567890" required>
                 <button type="button" class="btn btn-primary mt-3">Check Status</button>
             </form>
+            <!-- Display data -->
+            <?php
+              $api_url = 'https://travel.paytm.com/api/trains/v1/status?vertical=train&client=web&is_genuine_pnr_web_request=1&pnr_number=2107568301';
+              $response = file_get_contents($api_url);
+
+              // Check if the request was successful
+              if ($response === false)
+              {
+                  die('Failed to fetch data from the API');
+              }
+
+              // Decode the JSON response
+              $data = json_decode($response, true);
+
+              // Check if JSON decoding was successful
+              if ($data === null)
+              {
+                  die('Error decoding JSON data');
+              }
+
+              $train_number = $data['body']['train_number'];
+              $train_name = $data['body']['train_name'];
+              $boarding_date = $data['body']['date'];
+              $from = $data['body']['pulse_data']['journey_src'];
+              $to = $data['body']['pulse_data']['journey_dest'];
+              $boarding_point = $data['body']['boarding_station']['station_name'];
+              $reservation_upto = $data['body']['reservation_upto']['station_name'];
+              $travel_class = $data['body']['class'];
+            ?>
             <div class="h4 mt-5">You Queried for PNR number 1234567890</div>
             <table class="table table-warning table-hover table-rounded mt-3">
               <thead>
@@ -75,14 +104,14 @@
               </thead>
               <tbody>
                   <tr>
-                      <td>12345</td>
-                      <td>Rajdhani Express</td>
-                      <td>12/10/2024</td>
-                      <td>New Delhi</td>
-                      <td>Varanasi</td>
-                      <td>New Delhi</td>
-                      <td>Varanasi</td>
-                      <td>SL</td>
+                      <td><?php echo $train_number; ?></td>
+                      <td><?php echo $train_name; ?></td>
+                      <td><?php echo $boarding_date; ?></td>
+                      <td><?php echo $from; ?></td>
+                      <td><?php echo $to; ?></td>
+                      <td><?php echo $boarding_point; ?></td>
+                      <td><?php echo $reservation_upto; ?></td>
+                      <td><?php echo $travel_class; ?></td>
                   </tr>
               </tbody>
             </table>
