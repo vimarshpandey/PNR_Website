@@ -17,11 +17,50 @@
       {
           font-family: 'Poppins', sans-serif;
       }
-
-      .table-rounded
+      table
       {
-        border: 4px solid #d5c47c; /* Increase the border width as needed */
-        border-radius: 30px; /* Adjust the border-radius for rounded corners */
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+      }
+      th, td
+      {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+      /* Make table responsive */
+      @media screen and (max-width: 600px)
+      {
+        table {
+          border: 10;
+        }
+        table thead {
+          display: none;
+        }
+        table tr, table td {
+          display: block;
+          width: 100%;
+        }
+        table tr {
+          margin-bottom: 15px;
+        }
+        table td {
+          text-align: left;
+          border-bottom: 1px solid #ddd;
+        }
+        table td::before {
+          content: attr(data-label);
+          font-weight: bold;
+          float: left;
+          text-transform: uppercase;
+        }
+        .mg{
+          margin-top: 2.5rem;
+        }
+        .mgn{
+          font-weight: bold;
+        }
       }
     </style>
 
@@ -44,7 +83,7 @@
         </div>
       </header>
 
-      <div style="background-color: rgb(253, 162, 4);" class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center rounded-5">
+      <div style="background-color: rgb(253, 162, 4);" class="position-relative overflow-hidden mt-3 mb-3 p-md-5 m-md-3 text-center rounded-5">
         <div class="col-md-8 p-lg-5 mx-auto my-5">
           <h1 class="display-3 fw-bold">Check the Status of Your PNR</h1>
           <h3 class="fw-normal text-muted mb-3">"Experience seamless PNR status checks on our user-friendly website – stay informed about your train reservation in just a click!"</h3>
@@ -53,11 +92,11 @@
         <div class="product-device product-device-2 shadow-sm d-none d-md-block">gnfgbdfb</div> -->
       </div>
 
-      <div style="background-color: rgb(255, 200, 0);" class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center rounded-5">
+      <div style="background-color: rgb(255, 200, 0);" class="position-relative overflow-hidden mt-3 mb-3 p-md-5 m-md-3 text-center rounded-5">
         <div class="col-md-12 p-lg-5 mx-auto my-5" id="pnrstatus">
             <h1 class="fw-bold">Enter the PNR number</h1><br>
             <form class="text-center" method="post" action="">
-                <input type="text" class="form-control w-25 mx-auto" id="pnr" name="pnr" placeholder="Ex. 1234567890" required>
+                <input type="text" class="form-control mx-auto" id="pnr" name="pnr" placeholder="Ex. 1234567890" style="max-width: 300px;" required>
                 <div class="text-center">
                   <div class="g-recaptcha mt-3" data-sitekey="6LcsC5opAAAAAKZPZrQRj611EXzM_4P5EDUpRhBQ" style="display: inline-block;"></div>
                 </div>
@@ -75,9 +114,9 @@
                   $timeDifference = $currentTime - $lastRequestTime;
                   
                   // Check if the time difference is less than 5 minutes (300 seconds)
-                  if ($timeDifference < 180) {
+                  if ($timeDifference < 30) {
                       // Display a message indicating the user must wait
-                      echo '<div class="alert alert-warning mt-3" role="alert">Please wait for 3 minutes before making another request.</div>';
+                      echo '<div class="alert alert-warning mt-3" role="alert">Please wait for 30 seconds before making another request.</div>';
                       exit; // Exit the script
                   }
               }
@@ -135,7 +174,7 @@
                         $passenger_details = $data['body']['pax_info'];
                     ?>
                       <div class="h4 mt-5">You Queried for PNR number <?php echo htmlspecialchars($user_pnr); ?></div>
-                      <table class="table table-warning table-hover table-rounded mt-3">
+                      <table class="table table-warning table-hover mt-3">
                           <thead>
                             <tr>
                               <th>Train Number</th>
@@ -203,9 +242,9 @@
         </div>
       </div>
 
-      <div style="background-color: rgb(248, 215, 66);" class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center rounded-5">
-        <h1 class="fw-bold" id="fullform">Basic Full Form</h1><br>
-            <table class="table table-warning table-hover table-rounded mt-3">
+      <div style="background-color: rgb(248, 215, 66);" class="position-relative overflow-hidden mt-3 mb-3 p-md-5 m-md-3 text-center rounded-5">
+        <h1 class="fw-bold mg" id="fullform">Basic Full Form</h1><br>
+            <table class="table table-warning table-hover mt-3">
               <thead>
                   <tr>
                       <th>Word</th>
@@ -214,107 +253,107 @@
               </thead>
               <tbody>
                   <tr>
-                      <td>CAN / MOD</td>
+                      <td class="mgn">CAN / MOD</td>
                       <td>Cancelled or Modified Passenger</td>
                   </tr>
                   
-                  <tr>
-                    <td>CNF / Confirmed</td>
+                  <tr >
+                    <td class="mgn">CNF / Confirmed</td>
                     <td>Confirmed (Coach/Berth number will be available after chart preparation)</td>
                   </tr>
 
                   <tr>
-                    <td>RAC</td>
+                    <td class="mgn">RAC</td>
                     <td>Reservation Against Cancellation</td>
                   </tr>
 
                   <tr>
-                    <td>WL</td>
+                    <td class="mgn">WL</td>
                     <td>Waiting List Number</td>
                   </tr>
 
                   <tr>
-                    <td>RLWL</td>
+                    <td class="mgn">RLWL</td>
                     <td>Remote Location Wait List</td>
                   </tr>
 
                   <tr>
-                    <td>GNWL</td>
+                    <td class="mgn">GNWL</td>
                     <td>General Wait List</td>
                   </tr>
 
                   <tr>
-                    <td>PQWL</td>
+                    <td class="mgn">PQWL</td>
                     <td>Pooled Quota Wait List</td>
                   </tr>
 
                   <tr>
-                    <td>REGRET/WL</td>
+                    <td class="mgn">REGRET/WL</td>
                     <td>No More Booking Permitted</td>
                   </tr>
 
                   <tr>
-                    <td>RELEASED</td>
+                    <td class="mgn">RELEASED</td>
                     <td>Ticket Not Cancelled but Alternative Accommodation Provided</td>
                   </tr>
 
                   <tr>
-                    <td>R#</td>
+                    <td class="mgn">R#</td>
                     <td>RAC Coach Number Berth Number</td>
                   </tr>
 
                   <tr>
-                    <td>WEBCAN</td>
+                    <td class="mgn">WEBCAN</td>
                     <td>Railway Counter Ticket Passenger cancelled through internet and Refund not collected</td>
                   </tr>
 
                   <tr>
-                    <td>WEBCANRF</td>
+                    <td class="mgn">WEBCANRF</td>
                     <td>Railway Counter Ticket Passenger cancelled through internet and Refund collected</td>
                   </tr>
 
                   <tr>
-                    <td>RQWL</td>
+                    <td class="mgn">RQWL</td>
                     <td>Roadside Quota Waitlist</td>
                   </tr>
 
                   <tr>
-                    <td>DPWL</td>
+                    <td class="mgn">DPWL</td>
                     <td>Duty Pass Waitlist</td>
                   </tr>
 
                   <tr>
-                    <td>TQWL</td>
+                    <td class="mgn">TQWL</td>
                     <td>Tatkal Quota Waitlist</td>
                   </tr>
 
                   <tr>
-                    <td>NT</td>
+                    <td class="mgn">NT</td>
                     <td>Passenger Not Turned Up</td>
                   </tr>
 
                   <tr>
-                    <td>LB / UB / MB / SL / SU</td>
+                    <td class="mgn">LB / UB / MB / SL / SU</td>
                     <td>Lower Berth / Upper Berts / Middle Birth / Side Lower / Side Upper</td>
                   </tr>
 
                   <tr>
-                    <td>WS / CB / CP / SM / NC</td>
+                    <td class="mgn">WS / CB / CP / SM / NC</td>
                     <td>Window Side / Cabin / Coupe / Side Middle / No Choice</td>
                   </tr>
 
                   <tr>
-                    <td>1A / 2A / 3A / FC</td>
+                    <td class="mgn">1A / 2A / 3A / FC</td>
                     <td>First Class AC / AC 2 Tier / AC 3 Tier / First Class</td>
                   </tr>
 
                   <tr>
-                    <td>CC / EC</td>
+                    <td class="mgn">CC / EC</td>
                     <td>Chair Car / Executive Class</td>
                   </tr>
 
                   <tr>
-                    <td>3E / SL / 2S</td>
+                    <td class="mgn">3E / SL / 2S</td>
                     <td>AC 3 Tier Economy / Sleeper Class / Second Sitting</td>
                   </tr>
               </tbody>
@@ -323,9 +362,9 @@
         <div class="product-device product-device-2 shadow-sm d-none d-md-block">gnfgbdfb</div> -->
       </div>
 
-      <div style="background-color: rgb(245, 232, 131);" class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center rounded-5">
-        <div class="col-md-8 p-lg-5 mx-auto" id="aboutus">
-          <h1 class="display-3 fw-bold">About Us</h1>
+      <div style="background-color: rgb(245, 232, 131);" class="position-relative overflow-hidden mt-3 mb-3 p-md-5 m-md-3 text-center rounded-5">
+        <div class="col-md-8 mx-auto" id="aboutus">
+          <h1 class="display-3 fw-bold mg">About Us</h1>
           <div class="fw-normal text-muted">
             <p>Welcome to PNR Status Checker, your go-to platform for checking the status of your train reservations. We understand the importance of staying informed about your journey, and that's why we provide a simple and reliable tool to check PNR status effortlessly.</p>
 
@@ -334,13 +373,11 @@
             <p>At PNR Status Checker, we are passionate about delivering accurate and timely updates. Our team is dedicated to ensuring that you have the information you need, right at your fingertips. Feel free to use our service and make your train travel stress-free!</p>
           </div>
         </div>
-        <div class="product-device d-none d-md-block">
           <ul class="nav justify-content-center border-bottom pb-3 mb-3">
             <li class="nav-item"><a href="#pnrstatus" class="nav-link px-2 link-dark">PNR Status</a></li>
             <li class="nav-item"><a href="#fullform" class="nav-link px-2 link-dark">Full Forms</a></li>
           </ul>
-        </div>
-        <div class="product-device product-device-2 d-none d-md-block"><p class="text-center">&copy; 2024 Vimpandey. All right reserved</p></div>
+        <p class="text-center">&copy; 2024 Vimpandey. All right reserved</p>
       </div>
     </div>
   </body>
