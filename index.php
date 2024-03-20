@@ -104,25 +104,6 @@
             </form>
             <!-- Display data -->
             <?php
-              session_start();
-
-              // Check if last request time is set in session
-              if (isset($_SESSION['last_request_time']))
-              {
-                  $lastRequestTime = $_SESSION['last_request_time'];
-                  $currentTime = time();
-                  $timeDifference = $currentTime - $lastRequestTime;
-                  
-                  // Check if the time difference is less than 5 minutes (300 seconds)
-                  if ($timeDifference < 30) {
-                      // Display a message indicating the user must wait
-                      echo '<div class="alert alert-warning mt-3" role="alert">Please wait for 30 seconds before making another request.</div>';
-                      exit; // Exit the script
-                  }
-              }
-              
-              // Set the current time as the last request time in session
-              $_SESSION['last_request_time'] = time();
               if (isset($_POST['submit']))
               {
                 if(isset($_POST['g-recaptcha-response']))
@@ -145,11 +126,12 @@
                       $user_pnr = $_POST['pnr'];
 
                       $api_url = 'https://travel.paytm.com/api/trains/v1/status?vertical=train&client=web&is_genuine_pnr_web_request=1&pnr_number=' . urlencode($user_pnr);
-                      $response = file_get_contents($api_url);
+                      $response = @file_get_contents($api_url);
 
                       if ($response === false)
                       {
-                          die('Failed to fetch data from the API');
+                        echo '<div class="alert alert-warning mt-3" role="alert">Failed to fetch the data for the given PNR.<br>Maybe the given PNR number is wrong or the PNR data is flushed.</div>';
+                        exit;
                       }
 
                       $data = json_decode($response, true);
